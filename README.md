@@ -8,16 +8,16 @@ This project provides a step-by-step learning path to understand how AI "underst
 
 ### 📚 Learning Path
 
-1.  **[1_vectors_intro.py](file:///Users/amolc/2026/vectordbdemo/1_vectors_intro.py)**: 
+1.  **[1_vectors_intro.py](./1_vectors_intro.py)**: 
     - Introduces the concept of vectors as lists of numbers.
     - Uses a simple fruit example (Sweetness vs. Sourness) to visualize coordinates.
-2.  **[2_vector_similarity.py](file:///Users/amolc/2026/vectordbdemo/2_vector_similarity.py)**: 
+2.  **[2_vector_similarity.py](./2_vector_similarity.py)**: 
     - Explains **Cosine Similarity**.
     - Shows how to mathematically compare two vectors to see how similar they are.
-3.  **[3_ai_examples.py](file:///Users/amolc/2026/vectordbdemo/3_ai_examples.py)**: 
+3.  **[3_ai_examples.py](./3_ai_examples.py)**: 
     - Moves from simple 2D vectors to AI "Embeddings".
     - Demonstrates how words like "Pizza" and "Burger" are closer in a high-dimensional space than "Pizza" and "Laptop".
-4.  **[4_chromadb_demo.py](file:///Users/amolc/2026/vectordbdemo/4_chromadb_demo.py)**: 
+4.  **[4_chromadb_demo.py](./4_chromadb_demo.py)**: 
     - Hands-on with **ChromaDB**, an open-source vector database.
     - Shows how to store documents, automatically generate embeddings, and perform semantic searches.
 
