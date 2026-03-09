@@ -20,6 +20,27 @@ This project provides a step-by-step learning path to understand how AI "underst
 4.  **[4_chromadb_demo.py](./4_chromadb_demo.py)**: 
     - Hands-on with **ChromaDB**, an open-source vector database.
     - Shows how to store documents, automatically generate embeddings, and perform semantic searches.
+5.  **[app.py](./app.py)**: 
+    - The main Flask application that provides a search interface.
+6.  **[import_products.py](./import_products.py)**: 
+    - A script to import products from `products.csv` into ChromaDB.
+
+## 🛍️ AI Product Search Interface
+
+This project now includes a full search interface for products.
+
+### 📥 Importing Data
+To import the products into the vector database:
+```bash
+python3 import_products.py
+```
+
+### 🌐 Running the Web App
+To start the Flask search interface:
+```bash
+python3 app.py
+```
+Then visit `http://127.0.0.1:5001` in your browser.
 
 ## 🛠️ Getting Started
 
