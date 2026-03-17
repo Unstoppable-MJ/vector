@@ -1,90 +1,1062 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Product Search</title>
+    <title>Modern AI E-Commerce Store</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap CSS for grid spacing -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        body { background-color: #f8f9fa; }
-        .product-card { transition: transform 0.2s; height: 100%; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .product-img { height: 200px; object-fit: cover; }
-        .search-container { padding: 50px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 30px; border-radius: 0 0 20px 20px; }
-        .badge-distance { font-size: 0.75rem; background-color: #e9ecef; color: #6c757d; }
+        :root {
+            --primary-color: #6C63FF;
+            --secondary-bg: #F5F7FF;
+            --accent-color: #FF6B6B;
+            --text-main: #2D3748;
+            --text-muted: #718096;
+            --card-bg: #ffffff;
+            --border-color: #E2E8F0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, var(--secondary-bg) 0%, #FFFFFF 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Search Bar Hero */
+        .search-hero-container {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .search-hero-container h1 {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            letter-spacing: -0.5px;
+        }
+
+        .search-wrapper {
+            max-width: 650px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input-group {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 8px 12px 8px 25px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .search-input-group:focus-within {
+            box-shadow: 0 10px 40px rgba(108, 99, 255, 0.15);
+            border-color: rgba(108, 99, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .search-input-group input {
+            border: none;
+            outline: none;
+            box-shadow: none;
+            background: transparent;
+            font-size: 1.1rem;
+            flex-grow: 1;
+            padding: 10px 15px;
+            color: var(--text-main);
+        }
+
+        .search-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 12px 30px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .search-btn:hover {
+            background-color: #5b54e6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
+        }
+
+        /* Autocomplete Suggestions */
+        .autocomplete-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 5%;
+            width: 90%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .autocomplete-dropdown.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeInDrop 0.2s ease forwards;
+        }
+
+        @keyframes fadeInDrop {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            padding: 14px 25px;
+            cursor: pointer;
+            border-bottom: 1px solid #f7f7f7;
+            transition: background 0.2s;
+            color: var(--text-main);
+            font-size: 1rem;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f9f9ff;
+            color: var(--primary-color);
+            padding-left: 30px;
+        }
+
+        .autocomplete-dropdown strong {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        /* Categories Section */
+        .categories-section {
+            padding: 10px 0 50px;
+        }
+
+        .category-scroll {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 5px 20px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+        }
+
+        .category-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-pill {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            border-radius: 50px;
+            white-space: nowrap;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .category-pill i {
+            color: var(--primary-color);
+        }
+
+        .category-pill:hover,
+        .category-pill.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.25);
+        }
+
+        .category-pill:hover i,
+        .category-pill.active i {
+            color: white;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            margin-bottom: 80px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            height: 100%;
+            border: 1px solid #fdfdfd;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-img-wrapper {
+            height: 240px;
+            overflow: hidden;
+            position: relative;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.6s ease;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .no-image-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #CBD5E0;
+            background-color: #F7FAFC;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        .product-info {
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .product-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid #f5f5f5;
+        }
+
+        .product-price {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .view-btn {
+            background: rgba(108, 99, 255, 0.1);
+            color: var(--primary-color);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .view-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+        }
+
+        /* Match Score Badge */
+        .match-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            backdrop-filter: blur(4px);
+            border: 1px solid #eee;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            background: white;
+            padding: 60px 0 30px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            margin: 0 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Chatbot UI */
+        .chat-widget {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 1050;
+        }
+
+        .chat-toggle-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), #8B85FE);
+            color: white;
+            border: none;
+            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.35);
+            font-size: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .chat-toggle-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 85px;
+            right: 0;
+            width: 380px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .chat-window.open {
+            transform: scale(1);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary-color), #8B85FE);
+            padding: 20px 25px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            font-weight: 600;
+            font-size: 1.15rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chat-close:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 25px 20px;
+            overflow-y: auto;
+            background: #FAFAFA;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chat-bubble {
+            max-width: 85%;
+            padding: 14px 18px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bot-bubble {
+            background: white;
+            border: 1px solid #eee;
+            color: var(--text-main);
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+        }
+
+        .user-bubble {
+            background: var(--primary-color);
+            color: white;
+            border-bottom-right-radius: 4px;
+            align-self: flex-end;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.2);
+        }
+
+        .chat-input-area {
+            padding: 18px;
+            background: white;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            border: 1px solid #ddd;
+            background: #FAFAFA;
+            border-radius: 50px;
+            padding: 12px 20px;
+            outline: none;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        .chat-send-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(108, 99, 255, 0.2);
+        }
+
+        .chat-send-btn:hover {
+            background: #5b54e6;
+            transform: translateY(-2px);
+        }
+
+        /* Loading Animation */
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 16px 20px;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            width: fit-content;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+            opacity: 0.7;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        /* Custom scrollbar for chat */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chat-window {
+                width: calc(100vw - 40px);
+                bottom: 85px;
+                right: -20px;
+                height: 500px;
+            }
+
+            .search-hero-container {
+                padding: 40px 20px 20px;
+            }
+
+            .search-hero-container h1 {
+                font-size: 2.2rem;
+            }
+
+            .category-scroll {
+                padding-bottom: 5px;
+            }
+        }
+
+        /* Markdown generated content styles inside chat */
+        .bot-bubble img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #eee;
+        }
+
+        .bot-bubble h3 {
+            font-size: 1.15rem;
+            margin-top: 15px;
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .bot-bubble a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .bot-bubble a:hover {
+            text-decoration: underline;
+            color: #5b54e6;
+        }
+
+        .bot-bubble p {
+            margin-bottom: 10px;
+        }
+
+        .bot-bubble p:last-child {
+            margin-bottom: 0;
+        }
+
+        .bot-bubble strong {
+            color: #2D3748;
+        }
     </style>
 </head>
-<body>
 
-    <div class="search-container text-center">
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <h1 class="display-4 mb-4">AI Product Search</h1>
-            <p class="lead mb-4">Search our product collection using natural language. No keywords needed!</p>
-            <form action="/search" method="post" class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="input-group input-group-lg">
-                        <input type="text" name="query" class="form-control" placeholder="Try: 'something for my immune system' or 'restful sleep'..." value="{{ query if query else '' }}">
-                        <button class="btn btn-warning px-4" type="submit">Search</button>
+            <a class="navbar-brand" href="/">
+                <i class="fa-solid fa-leaf text-success me-2"></i> VitaStore <span
+                    style="font-size:0.9rem; color:var(--text-muted); font-weight:400; margin-left:8px;">AI
+                    Powered</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Search Area -->
+    <div class="search-hero-container">
+        <div class="container">
+            <h1 class="display-4 mb-3">Find the perfect supplement</h1>
+            <p class="lead text-muted mb-5">Search by category, function, or describe what you need.</p>
+
+            <form action="/search" method="post" id="search-form">
+                {% if selected_category %}
+                <input type="hidden" name="category" value="{{ selected_category }}">
+                {% endif %}
+
+                <div class="search-wrapper">
+                    <div class="search-input-group">
+                        <i class="fa-solid fa-search ms-2 text-muted fs-5"></i>
+                        <input type="text" name="query" id="search-input"
+                            placeholder="Try: 'immune support' or 'restful sleep'..."
+                            value="{{ query if query else '' }}" autocomplete="off">
+                        <button class="search-btn" type="submit">Search</button>
                     </div>
+
+                    <div class="autocomplete-dropdown" id="autocomplete-list"></div>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="container mb-5">
+    <!-- Categories Section -->
+    <div class="container categories-section">
+        <div class="d-flex align-items-center mb-4">
+            <h4 class="mb-0 fw-bold me-3">Explore Categories</h4>
+            <div style="flex-grow:1; height:1px; background:var(--border-color);"></div>
+        </div>
+        <div class="category-scroll">
+            <a href="/" class="category-pill {% if not selected_category %}active{% endif %}">
+                <i class="fa-solid fa-border-all"></i> All Products
+            </a>
+            {% for cat in categories %}
+            <a href="/?category={{ cat|urlencode }}"
+                class="category-pill {% if selected_category == cat %}active{% endif %}">
+                <i class="fa-solid fa-tag"></i> {{ cat }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="container product-grid">
+        {% if selected_category %}
+        <div class="mb-4">
+            <h4 style="color: #2D3748;">Category: <span class="text-primary fw-bold">{{ selected_category }}</span></h4>
+        </div>
+        {% endif %}
+
         {% if query %}
-            <div class="row mb-4">
-                <div class="col">
-                    <h3>Showing results for: <span class="text-primary">"{{ query }}"</span></h3>
-                </div>
-            </div>
+        <div class="mb-4">
+            <h4 style="color: #2D3748;">Results for: <span class="text-primary fw-bold">"{{ query }}"</span></h4>
+        </div>
         {% endif %}
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {% if results %}
-                {% for item in results %}
-                <div class="col">
-                    <div class="card product-card">
+            {% if suggestion %}
+            <div class="col-12 text-center py-5">
+                <h4 class="text-danger fw-bold mb-4">No exact match found.</h4>
+                <div class="p-5"
+                    style="background:white; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.05); display:inline-block;">
+                    <span class="text-muted fs-5 d-block mb-3">Did you mean:</span>
+                    <a href="javascript:void(0);"
+                        onclick="document.getElementById('search-input').value='{{ suggestion|replace("'", "\\'") }}'; document.getElementById('search-form').submit(); return false;"
+                        class="text-primary fw-bold text-decoration-none bg-light px-4 py-2 rounded-pill"
+                        style="font-size: 1.5rem; border:1px solid #eee; transition:all 0.3s;">{{ suggestion }}</a>
+                </div>
+            </div>
+            {% elif results %}
+            {% for item in results %}
+            <div class="col">
+                <div class="product-card">
+                    {% if item.distance is defined and item.distance > 0 %}
+                    <span class="match-badge"><i class="fa-solid fa-bullseye text-primary me-1"></i> Match: {{
+                        "%.0f"|format((1 - item.distance)*100) }}%</span>
+                    {% endif %}
+
+                    <div class="product-img-wrapper">
                         {% if item.metadata.image_url %}
-                            <img src="{{ item.metadata.image_url }}" class="card-img-top product-img" alt="{{ item.metadata.title }}">
+                        <img src="{{ item.metadata.image_url }}" alt="{{ item.metadata.title }}">
                         {% else %}
-                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center product-img">
-                                <span>No Image Available</span>
-                            </div>
+                        <div class="no-image-placeholder">
+                            <i class="fa-solid fa-image fs-1 mb-2 opacity-50"></i>
+                            <span>No Image</span>
+                        </div>
                         {% endif %}
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ item.metadata.title }}</h5>
-                            <p class="card-text text-muted flex-grow-1" style="font-size: 0.9rem;">
-                                {{ item.document[:150] }}...
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <span class="h5 mb-0">€{{ item.metadata.price if item.metadata.price else '0.00' }}</span>
-                                <span class="badge badge-distance">Match Score: {{ "%.2f"|format(1 - item.distance) }}</span>
-                            </div>
+                    </div>
+
+                    <div class="product-info">
+                        <span class="product-category">{{ item.metadata.category if item.metadata.category else
+                            'General' }}</span>
+                        <h5 class="product-title">{{ item.metadata.title }}</h5>
+                        <p class="product-desc">{{ item.document }}</p>
+
+                        <div class="product-footer">
+                            <span class="product-price">€{{ item.metadata.price if item.metadata.price else '0.00'
+                                }}</span>
                             {% if item.metadata.url %}
-                                <a href="{{ item.metadata.url }}" target="_blank" class="btn btn-outline-primary mt-3">View Product</a>
+                            <a href="{{ item.metadata.url }}" target="_blank" class="view-btn">View Product</a>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-                {% endfor %}
+            </div>
+            {% endfor %}
             {% elif query %}
-                <div class="col-12 text-center py-5">
-                    <h4>No products found. Try a different search!</h4>
+            <div class="col-12 text-center py-5">
+                <div class="p-5"
+                    style="background:white; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,0.03); max-width:600px; margin:0 auto;">
+                    <i class="fa-solid fa-box-open mb-4" style="font-size:4rem; color:#CBD5E0;"></i>
+                    <h4 class="fw-bold" style="color: #2D3748;">No products found!</h4>
+                    <p class="text-muted fs-5">Try a different search query or select another category.</p>
                 </div>
+            </div>
             {% else %}
-                <!-- Initial view if no query yet -->
-                <div class="col-12 text-center py-5 text-muted">
-                    <p>Enter a query above to find the perfect products for your needs.</p>
+            <div class="col-12 text-center py-5 text-muted">
+                <div class="py-5">
+                    <i class="fa-solid fa-magnifying-glass mb-3" style="font-size:3rem; color:#E2E8F0;"></i>
+                    <p class="fs-5">Enter a query above to find the perfect products for your needs.</p>
                 </div>
+            </div>
             {% endif %}
         </div>
     </div>
 
-    <footer class="py-4 text-center text-muted">
-        <p>Powered by ChromaDB & Flask</p>
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <div class="footer-logo">
+                <i class="fa-solid fa-leaf text-success me-2"></i> VitaStore
+            </div>
+            <p class="footer-text mb-4">Your trusted AI-powered supplements destination.</p>
+            <div class="footer-links mb-4">
+                <a href="#">About Us</a>
+                <a href="#">Categories</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <p class="text-muted" style="font-size:0.85rem;">Powered by ChromaDB & Flask & Gemini AI</p>
+        </div>
     </footer>
 
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+        <button id="chat-toggle" class="chat-toggle-btn shadow-lg">
+            <i class="fa-solid fa-message"></i>
+        </button>
+
+        <div id="chat-box" class="chat-window shadow-lg">
+            <div class="chat-header">
+                <h5 class="chat-title"><i class="fa-solid fa-robot"></i> ✨ AI Assistant</h5>
+                <button type="button" class="chat-close" id="chat-close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="chat-bubble bot-bubble">
+                    Hello! I'm your AI store assistant powered by Gemini. What are you looking for today?
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Type your message...">
+                <button class="chat-send-btn shadow-sm" id="chat-send">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap and Markdown Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        // --- 1. Autocomplete Data Setup ---
+        let allTitles = [];
+        {% if not query and results %}
+        // Store all products to local storage for persistent autocomplete
+        {% for item in results %}
+        allTitles.push("{{ item.metadata.title | replace('"', '\\"') | replace("'", "\\'") }}");
+        {% endfor %}
+        allTitles = [...new Set(allTitles)].filter(t => t.trim().length > 0);
+        localStorage.setItem('vector_all_products', JSON.stringify(allTitles));
+        {% else %}
+        // Recover from local storage
+        let savedTitles = localStorage.getItem('vector_all_products');
+        if (savedTitles) {
+            allTitles = JSON.parse(savedTitles);
+        }
+        {% endif %}
+
+        // --- 2. Autocomplete Logic ---
+        const searchInput = document.getElementById('search-input');
+        const autocompleteList = document.getElementById('autocomplete-list');
+
+        searchInput.addEventListener('input', function () {
+            let val = this.value.trim();
+            autocompleteList.innerHTML = '';
+
+            if (!val) {
+                autocompleteList.classList.remove('active');
+                return;
+            }
+
+            // Basic filtering
+            let matches = allTitles.filter(title => title.toLowerCase().includes(val.toLowerCase()));
+
+            if (matches.length > 0) {
+                // limit to 6 suggestions max mapping
+                matches.slice(0, 6).forEach(match => {
+                    let div = document.createElement("div");
+                    div.className = "dropdown-item";
+
+                    // highlight matching part safely
+                    const regex = new RegExp(`(${val.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, "gi");
+                    div.innerHTML = match.replace(regex, "<strong>$1</strong>");
+
+                    div.addEventListener("click", function () {
+                        searchInput.value = match;
+                        autocompleteList.classList.remove('active');
+                        document.getElementById('search-form').submit();
+                    });
+                    autocompleteList.appendChild(div);
+                });
+                autocompleteList.classList.add('active');
+            } else {
+                autocompleteList.classList.remove('active');
+            }
+        });
+
+        // Hide autocomplete when clicking outside
+        document.addEventListener("click", function (e) {
+            if (e.target !== searchInput) {
+                autocompleteList.classList.remove('active');
+            }
+        });
+
+        // --- 3. Chatbot Logic ---
+        const chatToggle = document.getElementById('chat-toggle');
+        const chatClose = document.getElementById('chat-close');
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatSend = document.getElementById('chat-send');
+
+        chatToggle.addEventListener('click', () => {
+            chatBox.classList.add('open');
+            chatToggle.style.transform = 'scale(0)';
+            setTimeout(() => { chatToggle.style.display = 'none'; }, 300);
+            chatInput.focus();
+        });
+
+        chatClose.addEventListener('click', () => {
+            chatBox.classList.remove('open');
+            chatToggle.style.display = 'flex';
+            setTimeout(() => { chatToggle.style.transform = 'scale(1) rotate(0deg)'; }, 10);
+        });
+
+        async function sendChatMessage() {
+            let message = chatInput.value.trim();
+            if (!message) return;
+
+            // Add user message to UI
+            chatMessages.innerHTML += `
+                <div class="chat-bubble user-bubble">
+                    ${message.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
+                </div>
+            `;
+            chatInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Add loading indicator
+            let loadingId = 'loading-' + Date.now();
+            chatMessages.innerHTML += `
+                <div id="${loadingId}" class="typing-indicator">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            `;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                let response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+                let data = await response.json();
+
+                // Remove loading
+                document.getElementById(loadingId).remove();
+
+                let formattedResponse = typeof marked !== 'undefined' ? marked.parse(data.response) : data.response;
+
+                chatMessages.innerHTML += `
+                    <div class="chat-bubble bot-bubble">
+                        ${formattedResponse}
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                chatMessages.innerHTML += `
+                    <div class="chat-bubble bot-bubble" style="background:#FFEBEB; color:#C53030; border-color:#FC8181;">
+                        <i class="fa-solid fa-circle-exclamation me-2"></i> Error communicating with the AI. Please make sure the server is running.
+                    </div>
+                `;
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        chatSend.addEventListener('click', sendChatMessage);
+        chatInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+    </script>
 </body>
+
 </html>
